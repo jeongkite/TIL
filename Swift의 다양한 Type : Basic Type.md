@@ -31,7 +31,7 @@
 
 ### Int와 UInt의 적절한 사용 방법
 
-![2표현범위](https://user-images.githubusercontent.com/75439868/214008353-e54f9409-3776-40c0-aef1-1481a4137e56.png)
+![Frame 78](https://user-images.githubusercontent.com/75439868/214253919-eb76d619-bdfc-4818-a7fa-b178fe402d5d.png)
 
 - 기본적으로 Int 사용
 - 특히 Int와 UInt 모두 사용 가능한 경우(연두색 범위) Int 사용

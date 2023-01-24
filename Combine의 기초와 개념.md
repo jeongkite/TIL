@@ -27,8 +27,8 @@
 
 ```swift
 protocol Publisher {
-		associatedtype Output
-		associatedtype Failure: Error
+	associatedtype Output
+	associatedtype Failure: Error
 }
 ```
 
@@ -48,8 +48,8 @@ protocol Publisher {
 
 ```swift
 protocol Subscriber {
-		associatedtype Input
-		associatedtype Failure: Error
+	associatedtype Input
+	associatedtype Failure: Error
 }
 ```
 
@@ -97,15 +97,15 @@ protocol Subscriber {
 
 ```swift
 class Weather {
-		@Published var temperature: Double
-		init(temperature: Double) {
-				self.temperature = temperature
-		}
+	@Published var temperature: Double
+	init(temperature: Double) {
+		self.temperature = temperature
+	}
 }
 
 let weather: Weather = Weather(temperature: 20)
 let subscription = weather.$temperature.sink {
-		print("Temperature now: \($0)")
+	print("Temperature now: \($0)")
 }
 weather.temperature = 25
 
@@ -151,11 +151,11 @@ weather.temperature = 25
 let jsonPublisher = MyJasonLoaderPublisher()
 
 jsonPublisher
-		.subscribe(on: backgroundQueue)
-		.receive(on: RunLoop.main)
-		.sink { value in 
-				label.text = value
-		}
+	.subscribe(on: backgroundQueue)
+	.receive(on: RunLoop.main)
+	.sink { value in 
+		label.text = value
+	}
 ```
 
 → 위 코드를 도식화 하면 아래 이미지처럼 나타낼 수 있다.
@@ -168,9 +168,9 @@ jsonPublisher
     
     ```swift
     publisher.sink {
-    		DispatchQueue.main.async {
-    				// update UI
-    		}
+	DispatchQueue.main.async {
+		// update UI
+	}
     }
     ```
     
@@ -178,6 +178,6 @@ jsonPublisher
     
     ```swift
     publisher.receive(on: DispatchQueue.main).sink {
-    		// update UI
+	// update UI
     }
     ```

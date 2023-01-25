@@ -352,30 +352,61 @@ Merge: subscription received value: 52
 # 9. Operator : removeDup & compactMap
 
 ```swift
-let subscription = subject
-    .print("[Debug] ")    // 흐름을 보여준다
-    .sink { value in
-    print("Subscriber received value: \(value)")
-}
+var subscriptions = Set<AnyCancellable>()
 
-subject.send("Hello")
-subject.send("Hello again!")
-subject.send("Hello for the last time!")
-//subject.send(completion: .finished)     // 데이터 전송 끝!
-subscription.cancel()                   // subscription에서 관계를 해제할 수도 있음.
-subject.send("Hello??")                 // 출력되지 않음.
+// removeDuplicates
+// 같은 데이터가 들어올 때, 중복 데이터를 지우는 방법
+let words = "hey hey there! Mr Mr ?"
+    .components(separatedBy: " ")
+    .publisher
+words
+    .removeDuplicates()
+    .sink { value in
+        print("removeDuplicates value: \(value)")
+    }.store(in: &subscriptions)
+
+
+// compactMap
+// 전환을 했는데, 전환한 내용이 nil인 경우 보내지 않는 방법
+let strings = ["a", "1.24", "3", "def", "45", "0.23"].publisher
+strings
+    .compactMap { Float($0) }
+    .sink { value in
+        print("compactMap value: \(value)")
+    }.store(in: &subscriptions)
+
+
+// ignoreOutput
+// 구독을 하긴 했는데, 새로 들어오는 이벤트 데이터를 신경쓰고싶지 않을 때
+let numbers = (1...10000).publisher
+numbers
+    .ignoreOutput()
+    .sink(receiveCompletion: { print("ignoreOutput value: \($0)")}, receiveValue: { print($0) })
+    .store(in: &subscriptions)
+
+
+// prefix
+// 여러개의 데이터가 들어올 때, 몇개만 받겠다
+let tens = (1...10).publisher
+tens
+    .prefix(2)
+    .sink { value in
+        print("prefix value: \(value)")
+    }.store(in: &subscriptions)
 ```
 
 ```
 💻 # 결과
 
-[Debug] : receive subscription: (PassthroughSubject)
-[Debug] : request unlimited
-[Debug] : receive value: (Hello)
-Subscriber received value: Hello
-[Debug] : receive value: (Hello again!)
-Subscriber received value: Hello again!
-[Debug] : receive value: (Hello for the last time!)
-Subscriber received value: Hello for the last time!
-[Debug] : receive cancel
+removeDuplicates value: hey
+removeDuplicates value: there!
+removeDuplicates value: Mr
+removeDuplicates value: ?
+compactMap value: 1.24
+compactMap value: 3.0
+compactMap value: 45.0
+compactMap value: 0.23
+ignoreOutput value: finished
+prefix value: 1
+prefix value: 2
 ```

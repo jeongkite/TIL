@@ -2,7 +2,7 @@
 
 ```swift
 // 데이터를 한 번 전송하고 끝
-let just = Just(1000)
+let just = Just(1000) 
 let subscription1 = just.sink { value in
     print("Just, Received Value: \(value)")
 }
